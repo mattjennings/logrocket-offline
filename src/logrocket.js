@@ -23,7 +23,9 @@ sendRequests()
   })
 
 export async function sendRequests() {
-  const requestKeys = await keys(RequestStore)
+  const requestKeys = (await keys(RequestStore)).sort((a, b) =>
+    a > b ? 1 : -1
+  )
 
   // send each request one by one. i'm not sure if it's safe to batch them.
   for (const key of requestKeys) {

@@ -38,9 +38,8 @@ self.addEventListener('fetch', (event) => {
           keepalive,
           blob: await event.request.blob(),
         }
-
-        // request.url is not always unique - need to find a better id for this. hashing of blob, maybe?
-        set(request.url, request, RequestStore)
+        const key = `${Date.now()}-${request.url}`
+        set(key, request, RequestStore)
 
         fetch(
           new Request(request.url, {
@@ -50,7 +49,7 @@ self.addEventListener('fetch', (event) => {
           })
         )
           .then((response) => {
-            del(request.url, RequestStore)
+            del(key, RequestStore)
 
             resolve(response)
           })
